@@ -1,15 +1,11 @@
 <h1 align="center">ndarray-interp</h1>
 
-<div align="center">Interpolation extensions for [ndarray](https://github.com/bluss/rust-ndarray).</div>
+<div align="center">Interpolation extensions for <a href="https://github.com/bluss/rust-ndarray">ndarray</a>.</div>
 <br />
 <div align="center">
-    <a href="https://travis-ci.org/Libbum/ndarray-interp">
-        <img src="https://travis-ci.org/Libbum/ndarray-interp.svg?branch=master" alt="Travis-ci" />
-    </a>
+<a href="https://travis-ci.org/Libbum/ndarray-interp"><img src="https://travis-ci.org/Libbum/ndarray-interp.svg?branch=master" alt="Travis-ci" /></a>
     │
-    <a href="https://codecov.io/gh/Libbum/ndarray-interp">
-        <img src="https://codecov.io/gh/Libbum/ndarray-interp/branch/master/graph/badge.svg" alt="Codecov" />
-    </a>
+<a href="https://codecov.io/gh/Libbum/ndarray-interp"><img src="https://codecov.io/gh/Libbum/ndarray-interp/branch/master/graph/badge.svg" alt="Codecov" /></a>
 </div>
 <br />
 
