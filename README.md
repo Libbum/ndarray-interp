@@ -3,7 +3,7 @@
 <div align="center">Interpolation extensions for [ndarray](https://github.com/bluss/rust-ndarray).</div>
 <br />
 <div align="center">
-    <a href="https://travis-ci.org/Libbum/ndaray-interp">
+    <a href="https://travis-ci.org/Libbum/ndarray-interp">
         <img src="https://travis-ci.org/Libbum/ndarray-interp.svg?branch=master" alt="Travis-ci" />
     </a>
     │
