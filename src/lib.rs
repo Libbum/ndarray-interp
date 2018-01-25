@@ -2,7 +2,7 @@ extern crate ndarray;
 extern crate ndarray_parallel;
 extern crate num_traits;
 
-use ndarray::{Array1, Array3, Zip};
+use ndarray::{Axis, Array1, Array3, ArrayViewMut1, Zip};
 use ndarray_parallel::prelude::*;
 use std::error::Error;
 use std::fmt;
@@ -75,12 +75,50 @@ pub fn lerp_unchecked(x: &Array1<f32>, y: &Array1<f32>, xi: &Array1<f32>) -> Arr
     output
 }
 
+pub fn trilerp_resize(_v: &Array3<f32>, size: usize) -> Array3<f32> {
+    // We're going to build a new array based on a new size.
+    // i.e, if we have v.size = 50x50x50, and size = 100
+    // then the output will be 100x100x100 linearly interpolated
+    // For now we'll assume square coords
+    let output = Array3::<f32>::zeros((size, size, size));
+    output
+}
+
+pub fn meshgrid(x: &mut Array1<f32>) -> (Array3<f32>, Array3<f32>, Array3<f32>) {
+    let nx = x.len();
+
+    let mut xx = Array3::<f32>::zeros((nx,nx,nx));
+    let mut yy = Array3::<f32>::zeros((nx,nx,nx));
+    let mut zz = Array3::<f32>::zeros((nx,nx,nx));
+
+    for mut lane in xx.lanes_mut(Axis(0)).into_iter() {
+        //TODO: There should be a nicer way to assign this.
+        for (mut a, b) in lane.iter_mut().zip(x.iter()) {
+            *a = *b;
+        }
+    }
+
+    for mut lane in yy.lanes_mut(Axis(1)).into_iter() {
+        for (mut a, b) in lane.iter_mut().zip(x.iter()) {
+            *a = *b;
+        }
+    }
+
+    for mut lane in zz.lanes_mut(Axis(2)).into_iter() {
+        for (mut a, b) in lane.iter_mut().zip(x.iter()) {
+            *a = *b;
+        }
+    }
+
+    (xx, yy, zz)
+}
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use ndarray::Array;
+    use ndarray::{Array, Array3};
     use num_traits::float::Float;
+    use std::f32::consts::PI;
 
     #[test]
     fn interp_l() {
@@ -148,5 +186,19 @@ mod tests {
                 -0.5440211,
             ])
         );
+    }
+
+    #[test]
+    fn trilinear_resize() {
+        let n = 3.;
+        let mut xn = Array::linspace(-n, n, 5);
+        let (x,y,z) = meshgrid(&mut xn);
+
+        let mut v = Array3::<f32>::zeros((5,5,5));
+        Zip::from(&mut v).and(&x).and(&y).and(&z).apply(|v, &x, &y, &z| {
+            *v = 1000./(2.*PI).sqrt()*(-(x.powi(2)/2.)-(y.powi(2)/2.)-(z.powi(2)/2.)).exp();
+        });
+        println!("{}", v);
+        assert!(false);
     }
 }
